@@ -388,10 +388,19 @@ _forgit_git_log() {
         _forgit_emojify
 }
 
+# Print the commit list shown by `glo`, using the same format resolution as
+# _forgit_log. Exposed as a private command so it can be re-run standalone,
+# e.g. from a `reload(...)` fzf binding in FORGIT_LOG_FZF_OPTS.
+_forgit_log_list() {
+    local log_format
+    log_format=${FORGIT_GLO_FORMAT:-$_forgit_log_format}
+    _forgit_git_log "$log_format" "$@"
+}
+
 # git commit viewer
 _forgit_log() {
     _forgit_inside_work_tree || return 1
-    local opts quoted_files log_format
+    local opts quoted_files
     quoted_files=$(_forgit_quote_files "$@")
     opts="
         $FORGIT_FZF_DEFAULT_OPTS
@@ -401,8 +410,7 @@ _forgit_log() {
         --preview=\"$FORGIT preview log_preview {} $quoted_files\"
         $FORGIT_LOG_FZF_OPTS
     "
-    log_format=${FORGIT_GLO_FORMAT:-$_forgit_log_format}
-    _forgit_git_log "$log_format" "$@" | FZF_DEFAULT_OPTS="$opts" fzf
+    _forgit_log_list "$@" | FZF_DEFAULT_OPTS="$opts" fzf
     fzf_exit_code=$?
     # exit successfully on 130 (ctrl-c/esc)
     [[ $fzf_exit_code == 130 ]] && return 0
@@ -1875,6 +1883,7 @@ PRIVATE_COMMANDS=(
     "yank_sha"
     "yank_stash_name"
     "log_enter"
+    "log_list"
     "exec_diff"
     "diff_view"
     "edit_diffed_file"
