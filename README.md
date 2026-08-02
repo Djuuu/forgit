@@ -274,7 +274,7 @@ Each forgit command can be customized with dedicated environment variables for g
 | Command  | Git Options | FZF Options |
 |----------|-------------|-------------|
 | `ga`     | `FORGIT_ADD_GIT_OPTS` | `FORGIT_ADD_FZF_OPTS` |
-| `glo`    | `FORGIT_LOG_GIT_OPTS` | `FORGIT_LOG_FZF_OPTS` |
+| `glo`    | `FORGIT_LOG_GIT_CMD`<br>`FORGIT_LOG_GIT_OPTS`<br>`FORGIT_LOG_PREVIEW_GIT_OPTS` | `FORGIT_LOG_FZF_OPTS` |
 | `grl`    | `FORGIT_REFLOG_GIT_OPTS` | `FORGIT_REFLOG_FZF_OPTS` |
 | `gi`     | | `FORGIT_IGNORE_FZF_OPTS` |
 | `gat`    | | `FORGIT_ATTRIBUTES_FZF_OPTS` |

@@ -362,7 +362,9 @@ _forgit_log_preview() {
     local sha
     sha=$(echo "$1" | _forgit_extract_sha)
     shift
-    git show --color=always -U"$_forgit_preview_context" "${sha}" -- "$@" | _forgit_pager show
+    _forgit_log_preview_git_opts=()
+    _forgit_parse_array _forgit_log_preview_git_opts "$FORGIT_LOG_PREVIEW_GIT_OPTS"
+    git show --color=always -U"$_forgit_preview_context" "${_forgit_log_preview_git_opts[@]}" "${sha}" -- "$@" | _forgit_pager show
 }
 
 _forgit_log_enter() {
@@ -380,7 +382,9 @@ _forgit_git_log() {
     [[ $_forgit_log_graph_enable == true ]] && graph=(--graph)
     _forgit_log_git_opts=()
     _forgit_parse_array _forgit_log_git_opts "$FORGIT_LOG_GIT_OPTS"
-    git log "${graph[@]}" --color=always --format="$log_format" "${_forgit_log_git_opts[@]}" "$@" |
+    _forgit_log_git_cmd=()
+    _forgit_parse_array _forgit_log_git_cmd "${FORGIT_LOG_GIT_CMD:-git log}"
+    "${_forgit_log_git_cmd[@]}" "${graph[@]}" --color=always --format="$log_format" "${_forgit_log_git_opts[@]}" "$@" |
         _forgit_emojify
 }
 
